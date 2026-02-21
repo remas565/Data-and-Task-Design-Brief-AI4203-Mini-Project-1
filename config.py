@@ -16,6 +16,7 @@ MAX_VOCAB_SIZE = 10000
 MAX_SEQ_LEN = 100
 VOCAB_SIZE=1000
 NUM_CLASSES=2
+
 # Dataset
 DATASET_NAME = "saurabhshahane/fake-news-classification"
 
