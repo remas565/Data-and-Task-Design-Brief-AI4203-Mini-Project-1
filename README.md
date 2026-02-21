@@ -1,14 +1,72 @@
-# Data-and-Task-Design-Brief-AI4203-Mini-Project-1
+# Data-and-Task-Design-Brief — AI4203 Mini Project 1
+
+## Project Overview
+
+This repository contains **Milestone 1: Transformer Encoder Implementation**, where the core building blocks of a Transformer encoder are implemented from scratch using **PyTorch**, and validated through unit checks and a **dry-run training pipeline** on a subset of the **WELFake (Fake News Classification)** dataset.
+
+Key components implemented:
+
+* Scaled Dot-Product Attention
+* Multi-Head Attention
+* Transformer Encoder Block (Add & Norm + FFN)
+* Learned Positional Embeddings
+* Transformer-based Text Classifier
+* Training + Evaluation pipeline (preprocessing, tokenization, dataloaders, metrics)
+
+---
+
+## Dataset
+
+**Fake News Classification (WELFake Dataset)**
+Kaggle Source: https://www.kaggle.com/datasets/saurabhshahane/fake-news-classification
+
+Labels:
+
+* **Fake (0)**
+* **Real (1)**
+
+The dataset is automatically downloaded using **kagglehub** (no manual download needed).
+
+---
+
+## Repository Structure
+
+```
+Data-and-Task-Design-Brief-AI4203-Mini-Project-1/
+│
+├── multihead__milestone1t.py     # Main script (implementation + training pipeline)
+├── config.py                    # Hyperparameters and runtime configuration
+├── README.md                    # Project documentation and run instructions
+```
+
+---
+
+## Configuration File (config.py)
+
+This project uses `config.py` to centralize all major hyperparameters and runtime settings, including:
+
+* Model parameters (D_MODEL, NUM_HEADS, D_FF, DROPOUT)
+* Data parameters (MAX_VOCAB_SIZE, MAX_SEQ_LEN)
+* Training parameters (BATCH_SIZE, EPOCHS, LEARNING_RATE)
+* Hardware options (USE_GPU)
+
+This allows easy experimentation by modifying a single file without changing the main implementation.
+
+The main script loads parameters using:
+
+```
+import config
+```
+
+---
 
 ## Project Execution Instructions
 
 This section provides detailed instructions to run the Transformer Encoder implementation and reproduce the experimental results.
 
----
+### 1) Environment Setup
 
-### Environment Setup
-
-Ensure that Python 3.8 or higher is installed.
+Ensure that **Python 3.8 or higher** is installed.
 
 Install the required dependencies:
 
@@ -26,23 +84,25 @@ These libraries are required for:
 
 ---
 
-### Running the Project
+### 2) Running the Project
 
-Navigate to the project directory and execute:
+Navigate to the repository directory and run:
 
 ```
 python multihead__milestone1t.py
 ```
 
-The script executes sequentially from top to bottom and does not require manual intervention.
+The script executes sequentially from top to bottom.
+The script automatically loads hyperparameters from `config.py`.
+No manual dataset download is required.
 
 ---
 
-### Execution Pipeline Details
+## Execution Pipeline Details
 
 The script performs the following stages:
 
-#### Stage 1: Attention Module Validation
+### Stage 1: Attention Module Validation
 
 The Scaled Dot-Product Attention module is tested for correctness:
 
@@ -60,7 +120,7 @@ Attention sum test passed.
 
 ---
 
-#### Stage 2: Gradient Flow Verification
+### Stage 2: Gradient Flow Verification
 
 A small forward and backward pass is performed to ensure:
 
@@ -76,7 +136,7 @@ Gradient flow test completed.
 
 ---
 
-#### Stage 3: Dataset Download
+### Stage 3: Dataset Download
 
 The dataset is automatically downloaded using kagglehub:
 
@@ -88,7 +148,7 @@ No manual dataset download is required.
 
 ---
 
-#### Stage 4: Data Preprocessing
+### Stage 4: Data Preprocessing
 
 The preprocessing pipeline performs:
 
@@ -100,11 +160,11 @@ The preprocessing pipeline performs:
 
 ---
 
-#### Stage 5: Vocabulary Construction
+### Stage 5: Vocabulary Construction
 
 The vocabulary is built from training data:
 
-* Maximum vocabulary size: 10,000 tokens
+* Maximum vocabulary size: **10,000 tokens**
 * Special tokens:
 
   * `<PAD>` for padding
@@ -112,34 +172,36 @@ The vocabulary is built from training data:
 
 ---
 
-#### Stage 6: Data Encoding
+### Stage 6: Data Encoding
 
 Each text sample is converted into a fixed-length sequence:
 
-* Maximum sequence length: 100 tokens
+* Maximum sequence length: **100 tokens**
 * Padding applied where necessary
 
 ---
 
-#### Stage 7: Model Initialization
+### Stage 7: Model Initialization
 
 The TransformerClassifier is initialized with:
 
-* Embedding dimension: 64
-* Number of attention heads: 8
-* Feedforward dimension: 256
-* Number of output classes: 2
-* Dropout: 0.1
+* Embedding dimension: **64**
+* Number of attention heads: **8**
+* Feedforward dimension: **256**
+* Number of output classes: **2**
+* Dropout: **0.1**
+
+(All values are configurable in `config.py`.)
 
 ---
 
-#### Stage 8: Dry Run Training
+### Stage 8: Dry Run Training
 
 A subset of the dataset is used:
 
-* Training samples: 5,000
-* Validation samples: 500
-* Number of epochs: 5
+* Training samples: **5,000**
+* Validation samples: **500**
+* Number of epochs: **5**
 
 This verifies the correctness of the training pipeline.
 
@@ -152,14 +214,12 @@ Epoch 5 | Train Loss: ...
 
 ---
 
-#### Stage 9: Model Evaluation
+### Stage 9: Model Evaluation
 
 The script computes:
 
 * Validation accuracy
-* Precision
-* Recall
-* F1-score
+* Precision / Recall / F1-score
 * Confusion matrix visualization
 
 Example output:
@@ -170,12 +230,15 @@ Validation Accuracy: 90.62%
 
 ---
 
-### Hardware Support
+## Hardware Support
 
 The script automatically detects hardware:
 
 * Uses GPU if available
 * Falls back to CPU if GPU is unavailable
+
+(If enabled in `config.py`.)
+Example:
 
 ```
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -183,18 +246,18 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 ---
 
-### Expected Runtime
+## Expected Runtime
 
-Approximate runtime:
+Approximate runtime (depends on system performance):
 
-* CPU: 5–15 minutes
-* GPU: 2–5 minutes
+* CPU: **5–15 minutes**
+* GPU: **2–5 minutes**
 
-depending on system performance.
+---
 
 ## Transformer Architecture Flow
 
-The TransformerClassifier processes input text through the following sequence of components:
+The TransformerClassifier processes input text through the following sequence:
 
 1. **Input Encoding**
 
@@ -202,7 +265,7 @@ The TransformerClassifier processes input text through the following sequence of
 
 2. **Token Embedding**
 
-   * Each token is mapped into a dense vector using:
+   * Each token is mapped into a dense vector:
 
    ```
    nn.Embedding(vocab_size, d_model)
@@ -210,7 +273,7 @@ The TransformerClassifier processes input text through the following sequence of
 
 3. **Positional Embedding**
 
-   * Learned positional embeddings are added to provide position information:
+   * Learned positional embeddings are added:
 
    ```
    LearnedPositionalEmbedding(max_seq_len, d_model)
@@ -227,21 +290,16 @@ The TransformerClassifier processes input text through the following sequence of
 5. **Transformer Encoder Block**
    The encoder block consists of:
 
-   * MultiHeadAttention
+   * **MultiHeadAttention**
 
      * Linear projections (Q, K, V)
      * Scaled Dot-Product Attention
      * Concatenation and projection
+   * **Residual Connection + LayerNorm**
+   * **Feed Forward Network**
 
-   * Residual Connection + LayerNorm
-
-   * Feed Forward Network:
-
-     ```
-     Linear → ReLU → Dropout → Linear
-     ```
-
-   * Residual Connection + LayerNorm
+     * Linear → ReLU → Dropout → Linear
+   * **Residual Connection + LayerNorm**
 
 6. **Pooling Layer**
 
@@ -253,7 +311,7 @@ The TransformerClassifier processes input text through the following sequence of
 
 7. **Classification Layer**
 
-   * Final linear layer outputs class scores:
+   * Final linear layer outputs logits:
 
    ```
    nn.Linear(d_model, num_classes)
