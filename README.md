@@ -191,3 +191,77 @@ Approximate runtime:
 * GPU: 2–5 minutes
 
 depending on system performance.
+
+## Transformer Architecture Flow
+
+The TransformerClassifier processes input text through the following sequence of components:
+
+1. **Input Encoding**
+
+   * Input text is converted into token IDs using the constructed vocabulary.
+
+2. **Token Embedding**
+
+   * Each token is mapped into a dense vector using:
+
+   ```
+   nn.Embedding(vocab_size, d_model)
+   ```
+
+3. **Positional Embedding**
+
+   * Learned positional embeddings are added to provide position information:
+
+   ```
+   LearnedPositionalEmbedding(max_seq_len, d_model)
+   ```
+
+4. **Embedding Combination**
+
+   * Token embeddings and positional embeddings are combined:
+
+   ```
+   x = token_embedding + positional_embedding
+   ```
+
+5. **Transformer Encoder Block**
+   The encoder block consists of:
+
+   * MultiHeadAttention
+
+     * Linear projections (Q, K, V)
+     * Scaled Dot-Product Attention
+     * Concatenation and projection
+
+   * Residual Connection + LayerNorm
+
+   * Feed Forward Network:
+
+     ```
+     Linear → ReLU → Dropout → Linear
+     ```
+
+   * Residual Connection + LayerNorm
+
+6. **Pooling Layer**
+
+   * Mean pooling aggregates token representations:
+
+   ```
+   x = x.mean(dim=1)
+   ```
+
+7. **Classification Layer**
+
+   * Final linear layer outputs class scores:
+
+   ```
+   nn.Linear(d_model, num_classes)
+   ```
+
+8. **Final Output**
+
+   * Output logits represent probabilities for:
+
+     * Fake News (0)
+     * Real News (1)
