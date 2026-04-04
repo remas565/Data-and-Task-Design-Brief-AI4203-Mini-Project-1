@@ -144,5 +144,3 @@ Navigate to the corresponding folder for detailed instructions.
 * Design is modular for extensibility
 
 ````
-parison  
-- Results are reproducible using fixed seed  
