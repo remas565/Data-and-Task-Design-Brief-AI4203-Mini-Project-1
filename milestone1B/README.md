@@ -1,91 +1,137 @@
 # Milestone 1B — Full Training and Ablation Study
 
 ## Objective
-Train the Transformer encoder on the full dataset, evaluate performance, and analyze the effect of a design choice.
+Train the Transformer encoder on the full dataset, evaluate its performance, and analyze the impact of a single architectural design choice.
+
+---
+
+## Run Instructions
+
+### Step 1: Navigate to Folder
+
+```bash
+cd milestone_1B
+````
+
+---
+
+### Step 2: Run Training Script
+
+```bash
+python milestone_1b_—_transformer_fake_news_classifier-5.py
+```
 
 ---
 
 ## Training Setup
 
 ### Hyperparameters
-- Batch size: 32  
-- Learning rate: 1e-3  
-- Epochs: 10  
-- Max sequence length: 100  
-- Embedding dimension (d_model): 128  
-- Feed-forward dimension (d_ff): 256  
-- Dropout: 0.1  
+
+* Batch size: 32
+* Learning rate: 1e-3
+* Epochs: 10
+* Max sequence length: 100
+* Embedding dimension (d_model): 128
+* Feed-forward dimension (d_ff): 256
+* Dropout: 0.1 (baseline)
 
 ---
 
 ## Training Pipeline
 
 ### Train Phase
-- Forward pass  
-- Compute loss (CrossEntropy)  
-- Backpropagation  
-- Parameter update  
+
+* Forward pass through Transformer encoder
+* Compute loss using CrossEntropyLoss
+* Backpropagation
+* Update model parameters using Adam optimizer
+
+---
 
 ### Validation Phase
-- Evaluate model after each epoch  
-- Track validation loss and accuracy  
+
+* Evaluate model after each epoch
+* Track:
+
+  * Validation loss
+  * Validation accuracy
+
+---
 
 ### Test Phase
-- Final evaluation on unseen data  
-- Generate classification metrics  
+
+* Evaluate final model on unseen test data
+* Generate:
+
+  * Accuracy
+  * Classification report
+  * Confusion matrix
 
 ---
 
 ## Evaluation Metrics
 
-- Accuracy  
-- Classification Report  
-- Confusion Matrix  
+* Accuracy (primary metric)
+* Classification Report (precision, recall, F1-score)
+* Confusion Matrix
 
 ---
 
 ## Ablation Study
 
 ### Objective
-Evaluate the impact of one architectural parameter.
 
-### Experiment Example
-- Number of attention heads:
-  - Baseline: 4 heads  
-  - Ablation: 2 heads  
+Evaluate the effect of dropout regularization on model performance.
+
+---
+
+### Experiment
+
+* Parameter: Dropout rate
+* Baseline: 0.1
+* Ablation: 0.3
+
+---
 
 ### Methodology
-- Keep all hyperparameters constant  
-- Modify only one variable  
-- Train both models independently  
-- Compare performance  
+
+* Same dataset and preprocessing
+* Same architecture and hyperparameters
+* Only dropout value is changed
+* Train both models independently
+* Compare results on test set
 
 ---
 
 ## Results
 
-| Model        | Heads | Accuracy |
-|-------------|------|----------|
-| Baseline    | 4    | Higher   |
-| Ablation    | 2    | Lower    |
-
-### Observation
-Increasing the number of attention heads improves the model’s ability to capture diverse contextual relationships.
+| Model    | Dropout | Test Accuracy |
+| -------- | ------- | ------------- |
+| Baseline | 0.1     | 95.32%        |
+| Ablation | 0.3     | 94.94%        |
 
 ---
 
-## Outputs
+## Interpretation
 
-- Training loss curve  
-- Validation accuracy curve  
-- Final test accuracy  
-- Confusion matrix visualization  
-- Results comparison table  
+The model with dropout = 0.1 achieved higher accuracy than dropout = 0.3.
+Increasing dropout introduces stronger regularization, which can reduce overfitting but may also limit the model’s ability to learn complex patterns, leading to slightly lower performance.
+
+---
+
+## Expected Outputs
+
+* Training loss curve
+* Validation accuracy curve
+* Final test accuracy
+* Classification report
+* Confusion matrix
+* Ablation comparison curves
 
 ---
 
 ## Notes
 
-- Only one parameter is changed in ablation  
-- Ensures fair comparison  
-- Results are reproducible using fixed seed  
+* Only one parameter (dropout) is modified to ensure fair comparison
+* Fixed random seed ensures reproducibility
+* GPU is recommended for faster training
