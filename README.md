@@ -1,325 +1,118 @@
 # Data-and-Task-Design-Brief — AI4203 Mini Project 1
 
-## Project Overview
-
-This repository contains **Milestone 1: Transformer Encoder Implementation**, where the core building blocks of a Transformer encoder are implemented from scratch using **PyTorch**, and validated through unit checks and a **dry-run training pipeline** on a subset of the **WELFake (Fake News Classification)** dataset.
-
-Key components implemented:
-
-* Scaled Dot-Product Attention
-* Multi-Head Attention
-* Transformer Encoder Block (Add & Norm + FFN)
-* Learned Positional Embeddings
-* Transformer-based Text Classifier
-* Training + Evaluation pipeline (preprocessing, tokenization, dataloaders, metrics)
-
 ---
 
-## Dataset
+## Project Overview
 
-**Fake News Classification (WELFake Dataset)**
-Kaggle Source: https://www.kaggle.com/datasets/saurabhshahane/fake-news-classification
+This project implements and evaluates a Transformer-based model for fake news classification using the WELFake dataset.
 
-Labels:
+The work is divided into two main milestones:
 
-* **Fake (0)**
-* **Real (1)**
+- **Milestone 1A:** Implementation of Transformer encoder components from scratch  
+- **Milestone 1B:** Full training, ablation study, and error analysis  
 
-The dataset is automatically downloaded using **kagglehub** (no manual download needed).
+The goal is to understand how Transformers work internally and evaluate their performance on a real-world NLP task.
 
 ---
 
 ## Repository Structure
 
 ```
+
 Data-and-Task-Design-Brief-AI4203-Mini-Project-1/
 │
-├── multihead__milestone1t.py     # Main script (implementation + training pipeline)
-├── config.py                    # Hyperparameters and runtime configuration
-├── README.md                    # Project documentation and run instructions
-```
+├── milestone1A/   # Transformer implementation (from scratch)
+├── milestone1B/   # Full training + ablation + evaluation
+├── README.md      # Project overview
+
+````
 
 ---
 
-## Configuration File (config.py)
+## Milestone 1A — Implementation
 
-This project uses `config.py` to centralize all major hyperparameters and runtime settings, including:
+Focus:
+- Build Transformer encoder components manually  
+- Understand attention (Q, K, V) and multi-head attention  
+- Validate correctness using unit tests  
 
-* Model parameters (D_MODEL, NUM_HEADS, D_FF, DROPOUT)
-* Data parameters (MAX_VOCAB_SIZE, MAX_SEQ_LEN)
-* Training parameters (BATCH_SIZE, EPOCHS, LEARNING_RATE)
-* Hardware options (USE_GPU)
+Main features:
+- Scaled Dot-Product Attention  
+- Multi-Head Attention  
+- Encoder Block (Add & Norm + FFN)  
+- Positional Embeddings  
+- Basic training pipeline (dry run)
 
-This allows easy experimentation by modifying a single file without changing the main implementation.
-
-The main script loads parameters using:
-
-```
-import config
-```
-
----
-
-## Project Execution Instructions
-
-This section provides detailed instructions to run the Transformer Encoder implementation and reproduce the experimental results.
-
-### 1) Environment Setup
-
-Ensure that **Python 3.8 or higher** is installed.
-
-Install the required dependencies:
-
-```
-pip install torch numpy pandas matplotlib scikit-learn kagglehub
-```
-
-These libraries are required for:
-
-* PyTorch → model implementation and training
-* NumPy and Pandas → data processing
-* Matplotlib → visualization
-* scikit-learn → evaluation metrics
-* kagglehub → automatic dataset download
+More details in: `milestone1A/README.md`
 
 ---
 
-### 2) Running the Project
+## Milestone 1B — Full Training & Analysis
 
-Navigate to the repository directory and run:
+Focus:
+- Train the model on the full dataset  
+- Evaluate performance on validation and test sets  
+- Analyze model behavior  
 
-```
+Main features:
+- Full training pipeline  
+- Ablation study (e.g., dropout / number of heads)  
+- Confusion matrix + pattern-based observations  
+- Error analysis  
+- Responsible AI considerations (bias + mitigation)
+
+More details in: `milestone1B/README.md`
+
+---
+
+## Dataset
+
+**WELFake Dataset (Fake News Classification)**  
+https://www.kaggle.com/datasets/saurabhshahane/fake-news-classification  
+
+- Binary classification:
+  - Fake (0)
+  - Real (1)
+
+The dataset is automatically downloaded using `kagglehub`.
+
+---
+
+## How to Run
+
+### Milestone 1A
+
+```bash
+cd milestone1A
 python multihead__milestone1t.py
-```
-
-The script executes sequentially from top to bottom.
-The script automatically loads hyperparameters from `config.py`.
-No manual dataset download is required.
+````
 
 ---
 
-## Execution Pipeline Details
+### Milestone 1B
 
-The script performs the following stages:
-
-### Stage 1: Attention Module Validation
-
-The Scaled Dot-Product Attention module is tested for correctness:
-
-* Verifies output tensor shape
-* Verifies masking functionality
-* Verifies attention normalization (sum of weights = 1)
-
-Expected output:
-
-```
-Shape test passed.
-Mask test passed.
-Attention sum test passed.
+```bash
+cd milestone1B
+python transformer_full_training.py
 ```
 
 ---
 
-### Stage 2: Gradient Flow Verification
+## Key Learning Outcomes
 
-A small forward and backward pass is performed to ensure:
-
-* Gradients propagate correctly
-* Loss computation works
-* Optimizer updates parameters
-
-Expected output:
-
-```
-Gradient flow test completed.
-```
+* Understanding Transformer architecture from scratch
+* Implementing attention mechanisms manually
+* Training and evaluating NLP models
+* Performing ablation studies
+* Analyzing model errors and limitations
 
 ---
 
-### Stage 3: Dataset Download
+## Notes
 
-The dataset is automatically downloaded using kagglehub:
+* GPU will be used if available
+* No manual dataset download is required
+* Each milestone is independent and can be run separately
 
+قولِي 😏
 ```
-path = kagglehub.dataset_download("saurabhshahane/fake-news-classification")
-```
-
-No manual dataset download is required.
-
----
-
-### Stage 4: Data Preprocessing
-
-The preprocessing pipeline performs:
-
-* Removal of location and source prefixes
-* Cleaning and normalization of text
-* Merging title and article content
-* Removing duplicates and invalid samples
-* Converting labels to integer format
-
----
-
-### Stage 5: Vocabulary Construction
-
-The vocabulary is built from training data:
-
-* Maximum vocabulary size: **10,000 tokens**
-* Special tokens:
-
-  * `<PAD>` for padding
-  * `<UNK>` for unknown words
-
----
-
-### Stage 6: Data Encoding
-
-Each text sample is converted into a fixed-length sequence:
-
-* Maximum sequence length: **100 tokens**
-* Padding applied where necessary
-
----
-
-### Stage 7: Model Initialization
-
-The TransformerClassifier is initialized with:
-
-* Embedding dimension: **64**
-* Number of attention heads: **8**
-* Feedforward dimension: **256**
-* Number of output classes: **2**
-* Dropout: **0.1**
-
-(All values are configurable in `config.py`.)
-
----
-
-### Stage 8: Dry Run Training
-
-A subset of the dataset is used:
-
-* Training samples: **5,000**
-* Validation samples: **500**
-* Number of epochs: **5**
-
-This verifies the correctness of the training pipeline.
-
-Expected output:
-
-```
-Epoch 1 | Train Loss: ...
-Epoch 5 | Train Loss: ...
-```
-
----
-
-### Stage 9: Model Evaluation
-
-The script computes:
-
-* Validation accuracy
-* Precision / Recall / F1-score
-* Confusion matrix visualization
-
-Example output:
-
-```
-Validation Accuracy: 90.62%
-```
-
----
-
-## Hardware Support
-
-The script automatically detects hardware:
-
-* Uses GPU if available
-* Falls back to CPU if GPU is unavailable
-
-(If enabled in `config.py`.)
-Example:
-
-```
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-```
-
----
-
-## Expected Runtime
-
-Approximate runtime (depends on system performance):
-
-* CPU: **5–15 minutes**
-* GPU: **2–5 minutes**
-
----
-
-## Transformer Architecture Flow
-
-The TransformerClassifier processes input text through the following sequence:
-
-1. **Input Encoding**
-
-   * Input text is converted into token IDs using the constructed vocabulary.
-
-2. **Token Embedding**
-
-   * Each token is mapped into a dense vector:
-
-   ```
-   nn.Embedding(vocab_size, d_model)
-   ```
-
-3. **Positional Embedding**
-
-   * Learned positional embeddings are added:
-
-   ```
-   LearnedPositionalEmbedding(max_seq_len, d_model)
-   ```
-
-4. **Embedding Combination**
-
-   * Token embeddings and positional embeddings are combined:
-
-   ```
-   x = token_embedding + positional_embedding
-   ```
-
-5. **Transformer Encoder Block**
-   The encoder block consists of:
-
-   * **MultiHeadAttention**
-
-     * Linear projections (Q, K, V)
-     * Scaled Dot-Product Attention
-     * Concatenation and projection
-   * **Residual Connection + LayerNorm**
-   * **Feed Forward Network**
-
-     * Linear → ReLU → Dropout → Linear
-   * **Residual Connection + LayerNorm**
-
-6. **Pooling Layer**
-
-   * Mean pooling aggregates token representations:
-
-   ```
-   x = x.mean(dim=1)
-   ```
-
-7. **Classification Layer**
-
-   * Final linear layer outputs logits:
-
-   ```
-   nn.Linear(d_model, num_classes)
-   ```
-
-8. **Final Output**
-
-   * Output logits represent probabilities for:
-
-     * Fake News (0)
-     * Real News (1)
