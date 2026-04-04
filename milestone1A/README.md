@@ -305,9 +305,4 @@ nn.Linear(d_model, num_classes)
 * Full training is not performed here
 * Milestone 1B extends this to full training, ablation, and error analysis
 
-```
 
-
-
-
-```
