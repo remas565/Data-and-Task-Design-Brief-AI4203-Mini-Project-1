@@ -28,8 +28,8 @@ Binary Text Classification
 Text (news articles)
 
 ### Data Composition
-Each sample typically includes:
-- Title (optional depending on preprocessing)
+Each sample includes:
+- Title (optional)
 - Article content (main text body)
 - Label (fake or real)
 
@@ -54,7 +54,6 @@ The following preprocessing steps are applied:
 
 3. **Tokenization**
    - Simple whitespace tokenizer
-   - Convert words into tokens
 
 4. **Vocabulary Construction**
    - Built using training set only
@@ -65,33 +64,29 @@ The following preprocessing steps are applied:
 
 5. **Sequence Processing**
    - Maximum sequence length: 100 tokens
-   - Truncation applied if longer
-   - Padding applied if shorter
+   - Apply truncation and padding
 
 ---
 
 ## Data Split
 
-Dataset is split as follows:
-
 - Train: 80%  
 - Validation: 10%  
 - Test: 10%  
 
-Stratified splitting is used to preserve label distribution.
-
-Random seed is fixed for reproducibility.
+Stratified splitting is used to preserve label distribution.  
+A fixed random seed ensures reproducibility.
 
 ---
 
 ## Why Transformer Encoder?
 
-Transformer encoder is suitable because:
+The Transformer encoder is suitable because it:
 
-- Captures long-range dependencies in text  
+- Captures long-range dependencies  
 - Uses self-attention to focus on important words  
 - Handles variable-length sequences efficiently  
-- Provides contextual representations for classification  
+- Produces contextual representations for classification  
 
 ---
 
@@ -118,29 +113,88 @@ pip install torch numpy pandas matplotlib scikit-learn kagglehub
 
 ---
 
-## Running the Project
+## Run Instructions
 
-Each milestone is independent:
+### 1. Clone and Setup
 
-* Milestone 1A → Core implementation
-* Milestone 1B → Full training and evaluation
+```bash
+git clone <repo-link>
+cd <repo-name>
+pip install torch numpy pandas matplotlib scikit-learn kagglehub
+```
 
-Navigate to the corresponding folder for detailed instructions.
+---
+
+### 2. Dataset
+
+The dataset is automatically downloaded using `kagglehub` inside the code.
+Ensure Kaggle access is properly configured if required.
+
+---
+
+### 3. Execute Milestones
+
+Each milestone is independent and must be run separately.
+
+#### Milestone 1A — Core Implementation
+
+```bash
+cd milestone_1A
+```
+
+* Run the notebook:
+
+```bash
+jupyter notebook
+```
+
+Open:
+
+```
+Multihead__milestone1t.ipynb
+```
+
+OR run script:
+
+```bash
+python <script_name>.py
+```
+
+---
+
+#### Milestone 1B — Full Training + Evaluation + Ablation
+
+```bash
+cd milestone_1B
+python milestone_1b_—_transformer_fake_news_classifier-5.py
+```
+
+---
+
+### 4. Expected Output
+
+After running the project:
+
+* Training loss curve
+* Validation accuracy
+* Final test accuracy
+* Classification report
+* Confusion matrix
+* Ablation comparison results
 
 ---
 
 ## Reproducibility
 
-* Fixed random seed is used
-* Deterministic splits
-* Consistent hyperparameters across experiments
+* Fixed random seed
+* Deterministic data split
+* Consistent configuration across experiments
 
 ---
 
 ## Notes
 
-* No prebuilt Transformer modules are used
-* Model is implemented from scratch
-* Design is modular for extensibility
+* Transformer is implemented from scratch
+* No use of high-level Transformer modules
+* Modular design for easy extension
 
-````
